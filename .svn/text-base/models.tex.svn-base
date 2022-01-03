@@ -1,0 +1,273 @@
+\hyphenation{su-pports}
+
+\section{Model and Correctness}
+\label{sec:correctness}
+
+\remove{
+A \emph{database} is a collection of \emph{data items}  uniquely identified by
+their keys.
+%(in our context, table rows). 
+Multiple versions (values) of each item may co-exist 
+simultaneously. Each item is a single-writer object, controlled by a 
+unique process called {\em data server}. 
+%The latter installs  total order among the item's versions. %A data server can atomically write multiple items
+%under its control. 
+
+A \emph{transactional processing system} employs \emph{transactions} to execute
+pieces of sequential code, namely \emph{operations}, by concurrent asynchrounous
+processes. An {implementation} of the system provides routines to execute these
+operations. When a process calls a routine we say it \emph{invokes} an
+operation, when  the execution of the routine is completed a \emph{response} is
+returned.
+%A \emph{transaction} is a sequence of operations executed by a single process.
+% These include gets and puts on data items, as well as begin, commit and abort operations.
+A \emph{begin} operation initializes a transaction and returns 
+its handle. A \emph{commit} operation returns an indication whether the transaction 
+committed or aborted. An \emph{abort} cancels the transaction and returns an
+abort indication.
+A \emph{get} operation specifies the key of the data item to read, and returns the value read
+by the operation. A \emph{put} operation specifies the key and a value to be
+written. Get and put operations return an abort indication if the transaction
+in which it is invoked has to abort.
+For simplicity of presentation, we do not consider additional operations (e.g., range get queries).
+In the rest of the paper we use the terms put/write, and get/read
+interchangeably.
+
+After the transaction begins, it executes a sequence of get and put operations, followed by either a commit or an abort. 
+\emph{Abort ratio} %of an execution
+is the ratio between aborted transactions and transactions that have not invoked the abort operation. 
+
+The collection of data items accessed by a transaction is its data set. 
+The data items it puts are its \emph{write set}, and the data items it gets are its 
+\emph{read set}. A \emph{read-only} transaction performs only get 
+operations (its write set is empty); otherwise, it is an \emph{update}
+transaction. A \emph{write-only} transaction is an update transaction with an empty read
+set. A \emph{put} transaction is a write-only transaction updating a single
+item.
+
+A \emph{native} operation is either a put or a get operation that is not
+executed in the context of a transaction. Unlike their transactional
+equivalents, native operation never return an abort indication.
+
+%An \emph{implementation} of a transaction processing system provides (1) data
+% structures for representing transactions and data items, and (2) algorithms, specified as 
+%operations on these data structures. \emph{Asynchronous} processes 
+%invoke these operations in order to execute native gets/puts and transactions.
+}
+
+We refine the classical definitions of serializability
+%~\cite{Papadimitriou1979}
+and snapshot isolation (SI) %~\cite{Berenson1995, WeikumTIS2001} 
+to apply for mixed traffic executions. Then we outline the safety proofs for our
+algorithms.
+
+
+%We assume native operations are never aborted by the database, and require that
+% the transaction processing implementation never aborts them as well.
+
+\subsection{Consistency Models}
+\label{sec:models}
+
+
+A \emph{transactional processing system} employs \emph{transactions} to execute
+pieces of sequential code, namely \emph{operations}, by concurrent asynchrounous
+processes. An \emph{implementation} of the system provides routines to execute
+these operations. When a process calls a routine we say it \emph{invokes} an
+operation, when  the execution of the routine is completed a \emph{response} is
+returned.
+
+An \emph{execution} is a sequence of invocation and responses of native and
+transactional operations starting from the initial configuration of the database. 
+%Each operation is assumed to be executed as an atomic step. 
+If the last response of a transaction is a commit or abort
+indication, then the transaction is \emph{completed}, and is said to be
+\emph{committed} or \emph{aborted}, respectively; if a transaction invoked a
+commit but not yet received a response then it is \emph{commit-pending};
+otherwise, it is \emph{active}. 
+
+In a \emph{serial execution}, native operations and transactions are executed to
+completion in isolation one after the other.
+\remove{A \emph{committed projection} is attained by 
+%keeping all native operations and committed transactions, while 
+discarding all active and aborted transactions from the execution.}
+
+A transaction $T$ is \emph{legal} in a % committed projection of a 
+serial execution if every read invocation of $x$ in $T$ returns a value that was
+written to $x$ in $T$ before the read, or if there are no invocations of write to $x$ in $T$
+before the read, then the read returns a value that was last written to $x$
+before $T$ by a native put or a committed transaction, or the initial value of
+$x$ if no such write to $x$ exists before $T$. A native read $op$ is
+\emph{legal} in a % committed projection of a 
+serial execution if it returns a value that was last written to $x$
+before $op$ by a native put or a committed transaction, or the initial value of
+$x$ if no such write to $x$ exists before $op$. A % committed projection of a
+serial execution is \emph{legal} if all its committed transactions and native
+reads are legal.
+
+%Two executions are \emph{equivalent} if (1)~they consist of the same set of
+% transactions and native operations, (2)~both transactional and native gets return the same values in both executions, and 
+%(3)~the order of any pair of transactions executed by the same process, as well
+%as any pair of read and write operations (native and transactional) accessing
+%the same item by the same process is the same in both executions
+% (\emph{per-process order}).
+An execution $\alpha'$ preserves the \emph{per-process transaction order} of
+execution $\alpha$ if it preserves the order of any pair of begin operations executed
+by the same process in $\alpha$. An execution $\alpha'$ preserves the
+\emph{per-process item order} of execution $\alpha$ if it preserves the order of
+any pair of native and transactional operations accessing the
+same item and executed by the same process in $\alpha$.
+
+Let $T$ be a committed transaction in an execution $\alpha$. Let $T|read$
+($T|write$, $T|all$) be the longest subsequence of $T$ in
+$\alpha$ consisting only of $T$'s read (write, read and write, respectively)
+invocations and their corresponding responses. 
+The transaction $T_r$ is defined as follows: if $T|read$ is empty
+then $T_r$ is empty, otherwise $T_r$ is the sequence of a begin invocation and
+response appended by $T|read$, a commit invocation and a committed response;
+$T_w$ and $T_{rw}$ are defined in a similar way, w.r.t. $T|write$ and
+$T|all$.
+
+A \emph{serialization} of an execution $\alpha$ is the sequence
+$\sigma_{\alpha}$ that includes a \emph{serialization point} for every native
+operation in $\alpha$, $*_{op}$, for every committed transaction, and for
+some of the commit-pending transactions in $\alpha$,
+$*_{T}$.
+The \emph{serial execution} $\alpha'$ corresponding to
+$\sigma_{\alpha}$ is defined by replacing each $*_{T}$ with $T_{rw}$ and each
+$*_{op}$ with \emph{op}'s invocation and response in
+$\alpha$. 
+
+
+\begin{definition}[serializability] 
+An implementation supports \emph{serializability} if any execution $\alpha$ 
+has a
+serialization, $\sigma_{\alpha}$, such that
+the serial execution
+$\alpha'$ corresponding to $\sigma_{\alpha}$ is legal and preserves
+the per-process transaction order and per-process item order of $\alpha$.
+\end{definition}
+%$S$ is called the \emph{serialization} of $E$.
+%; we assume that this serialization order preserves the per-process order, i.e., transactions of the same process maintain their order.
+
+\remove{
+The weaker condition of snapshot isolation 
+%was suggested as an efficient alternative to serializability for relational databases. It 
+decouples the consistency of the gets and the puts of a transaction.
+%into the begin time of the transaction and its commit time, respectively. 
+Informally, all reads within a transaction see a consistent view of the
+database, as though the transaction operates on a private snapshot of the
+database taken before its first read. In addition, concurrent transactions are not allowed to modify the same data.  
+%this means each transaction is provided with a snapshot of the database at the time of transaction start. 
+\full{For a formal definition, see~\cite[Definition 10.3]{WeikumTIS2001}.}
+}
+\remove{
+A \emph{read point} of a transaction is a sequence of its begin operation
+followed by all its get operations. A \emph{write point} of a transaction is a
+sequence of its put operations followed by its commit operation.  
+In a \emph{snapshot serial execution}, the read points of all transactions, the
+write points of all transactions, and all native operations are executed to
+completion in isolation one after the other, where each read point precedes its
+respective write point.   
+The \emph{interval} of a write-only transaction is its commit operation. The
+interval of other update transactions starts with the begin operation and ends
+with the commit operation of this transaction (if no such commit operation
+exists, the interval ends at the end of the execution). 
+The interval of a native operation is the operation iteslf.
+Two transactions or a transaction and a native operation \emph{overlap} if their
+intervals overlap. 
+%; otherwise they are non-overlapping.
+
+\begin{definition}[snapshot isolation]
+An implementation supports \emph{snapshot isolation} if it satisfies two properties:
+
+\textbf{Snapshot property} A committed projection of any execution is equivalent to some snapshot-serial execution. 
+%$S$, such that $S$ satisfies two properties: 
+
+%\noindent
+\textbf{Disjoint writes property} The write sets of any pair of overlapping transactions, and any pair of overlapping 
+transaction and native put
+operation, are disjoint.
+
+%\noindent
+%\textbf{Snapshot property} A get, either transactional or native, reading item $r$, returns the last value written to $r$ prior to the transaction's reading point or the native read's, respectively, or the initial value if no such write exists\footnote{At any point in snapshot-serial executions, the last value written to an item is well defined.}.
+\end{definition}
+}
+
+
+A \emph{snapshot serialization} of an execution $\alpha$, is the sequence
+$\sigma_{\alpha}$ that includes a serialization point for every native
+operation in $\alpha$, $*_{op}$, and for every committed transaction and for
+some of the commit-pending transactions in $\alpha$ it includes a \emph{read
+serialization point} $*_{T_r}$ and a \emph{write serialization point} $*_{T_w}$
+such that (i)~$*_{T_r}$ preceeds $*_{T_w}$, (ii)~both $*_{T_r}$ and $*_{T_w}$
+are inserted after the invocation of $T$'s begin and before the response of
+$T$'s commit in $\alpha$.
+The \emph{snapshot serial execution} $\alpha'$ corresponding to
+$\sigma_{\alpha}$ is defined by replacing each $*_{T_r}$ with $T_r$ and each
+$*_{T_w}$ with $T_w$  and each $*_{op}$ with
+\emph{op}'s invocation and response in $\alpha$.
+
+For any execution $\alpha$, consider a snapshot serialization
+$\sigma_{\alpha}$ of $\alpha$. The \emph{interval} of a native put
+operation \emph{op} is $*_{op}$. The \emph{interval} of a
+write-only transactions $T$ is the point $*_{T_w}$. The \emph{interval} of a
+read-only transactions $T$ is the point $*_{T_r}$. The \emph{interval} of a
+read-write transaction $T$ is the interval between
+$*_{T_r}$ and $*_{T_w}$ in $\sigma_{\alpha}$. 
+Two transactions or a transaction and a native
+put operation \emph{overlap} in $\sigma_{\alpha}$ if their intervals overlap.
+
+\remove{
+The \emph{interval} of a write-only transaction is the interval between the
+invocation and response of its commit operation.
+The \emph{interval} of an update transaction (that is not write-only) is the
+interval between the invocation of its begin operation and the response of its commit
+operation. If no such response exists, the interval ends at the end of
+the execution).
+The \emph{interval} of a native operation is the interval between its
+invocation and response. Native operations are \emph{atomic}, namely within
+their intervals there is no invocation or response of any other operation.
+Two transactions or a transaction and a native operation \emph{overlap} if their intervals overlap.
+}
+
+
+\begin{definition}[snapshot isolation]
+\remove{
+An execution $\alpha$ is \emph{snapshot serializable}, if it has a snapshot
+serialization $\sigma_{\alpha}$ such that the serial execution $\alpha'$
+corresponding to $\sigma_{\alpha}$ is legal and preserves the per-process item
+order in $\alpha$.
+}
+
+An implementation supports \emph{snapshot isolation} if any execution $\alpha$ 
+%satisfies two properties:
+has a snapshot
+serialization $\sigma_{\alpha}$ such that:
+%\noindent
+
+\textbf{Snapshot property} the snapshot serial execution $\alpha'$
+corresponding to $\sigma_{\alpha}$ is legal and preserves the per-process item
+order in $\alpha$.
+%$\alpha$ is snapshot serializable. 
+
+%\noindent
+\textbf{Disjoint writes property} The write sets of any pair of overlapping
+transactions, and any pair of overlapping transaction and native put operation
+in $\sigma_{\alpha}$, are disjoint.  
+\end{definition}
+
+The snapshot property implies that native get operations cannot read an
+uncommitted value; for serializability, the same trivially follows from the total order.
+The deviation of these definitions from a straightforward extension of classical 
+definitions --conceiving native operations as transactions---is twofold:
+(1)~native operations cannot abort (while transactions can), 
+(2)~similar to traditional NoSQL, both models might flip the order of two
+native gets in the serialization (whereas two read transactions by the same
+process cannot flip their order). 
+For example, a process that sequentially reads two items might observe an older version in the 
+second read (e.g., since the items are 
+updated in parallel by some transaction).
+%In our social application example, when the application displays
+%a view covering the status of all the user's friends, it uses native reads
+%to access them, and it is ok if one status is not
+%up-to-date (as it is being concurrently updated by a transaction).

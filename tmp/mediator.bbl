@@ -1,0 +1,136 @@
+\begin{thebibliography}{10}
+
+\bibitem{Alomari2008}
+M.~Alomari, M.~Cahill, A.~Fekete, and U.~Rohm.
+\newblock The cost of serializability on platforms that use snapshot isolation.
+\newblock In {\em ICDE}, 2008.
+
+\bibitem{AttiyaDC2004}
+H.~Attiya and J.~Welch.
+\newblock {\em Distributed Computing: Fundamentals, Simulations, and Advanced
+  Topics}.
+\newblock Wiley Series on Parallel and Distributed Computing, 2004.
+
+\bibitem{Corfu2012}
+M.~Balakrishnan, D.~Malkhi, V.~Prabhakaran, T.~Wobber, and M.~Wei.
+\newblock Corfu: A shared log design for flash clusters.
+\newblock In {\em NSDI}, 2012.
+
+\bibitem{Berenson1995}
+H.~Berenson, P.~Bernstein, J.~Gray, J.~Melton, E.~O'Neil, and P.~O'Neil.
+\newblock A critique of ansi sql isolation levels.
+\newblock In {\em SIGMOD '95}, pages 1--10, 1995.
+
+\bibitem{Bloom1970}
+B.~H. Bloom.
+\newblock Space/time trade-offs in hash coding with allowable errors.
+\newblock {\em Commun. ACM}, 13(7):422--426, July 1970.
+
+\bibitem{full}
+E.~Bortnikov, E.~Hillel, and A.~Sharov.
+\newblock Reconciling transactional and non-transactional operations in
+  distributed key-value stores.
+\newblock Technical report, Yahoo Labs, 2014.
+
+\bibitem{Cahill2008}
+M.~J. Cahill, U.~Rohm, and A.~Fekete.
+\newblock Serializable isolation for snapshot databases.
+\newblock In {\em SIGMOD}, pages 729--738, 2008.
+
+\bibitem{BigTable2006}
+F.~Chang et~al.
+\newblock Bigtable: A distributed storage system for structured data.
+\newblock In {\em OSDI}, 2006.
+
+\bibitem{PNUTS2008}
+B.~F. Cooper, R.~Ramakrishnan, U.~Srivastava, A.~Silberstein, P.~Bohannon,
+  H.-A. Jacobsen, N.~Puz, D.~Weaver, and R.~Yerneni.
+\newblock Pnuts: Yahoo!s hosted data serving platform.
+\newblock In {\em VLDB}, 2008.
+
+\bibitem{YCSB2010}
+B.~F. Cooper, A.~Silberstein, E.~Tam, R.~Ramakrishnan, and R.~Sears.
+\newblock Benchmarking cloud serving systems with {YCSB}.
+\newblock In {\em ACM SoCC 2010}, pages 143--154, 2010.
+
+\bibitem{Spanner2012}
+J.~C. Corbett et~al.
+\newblock Spanner: Google's globally-distributed database.
+\newblock In {\em OSDI}, pages 251--264, 2012.
+
+\bibitem{RAMCloud2011}
+J.~O. et. al.
+\newblock The case for ram cloud.
+\newblock {\em Commun. ACM}, 54:121--130, July 2011.
+
+\bibitem{FeketeTODS2005}
+A.~Fekete, D.~Liarokapis, E.~O'Neil, P.~O. Neil, and D.~Shasha.
+\newblock Making snapshot isolation serializable.
+\newblock {\em ACM TODS}, 30:492--528, 2005.
+
+\bibitem{OmidEurosys2012}
+D.~Gomez-Ferro and M.~Yabandeh.
+\newblock A critique of snapshot isolation.
+\newblock In {\em EuroSys}, pages 155 -- 168, 2012.
+
+\bibitem{GrayTP1993}
+J.~Gray and A.~Reuters.
+\newblock {\em Transaction Processing: Concepts and Techniques}.
+\newblock Morgan Kaufmann, 1993.
+
+\bibitem{Herlihy2008}
+M.~Herlihy and N.~Shavit.
+\newblock {\em The Art of Multiprocessor Programming}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 2008.
+
+\bibitem{Bookkeeper2013}
+F.~P. Junqueira, I.~Kelly, and B.~Reed.
+\newblock {Durability with BookKeeper}.
+\newblock {\em OS Review}, 47:9--15, 2013.
+
+\bibitem{Papadimitriou1979}
+C.~H. Papadimitriou.
+\newblock The serializability of concurrent database updates.
+\newblock {\em J. ACM}, 26(4):631--653, Oct. 1979.
+
+\bibitem{Peluso2012}
+S.~Peluso, P.~Romano, and F.~Quaglia.
+\newblock {SCORe}: A scalable one-copy serializable partial replication
+  protocol.
+\newblock In {\em Proceedings of the 13th International Middleware Conference},
+  Middleware '12, pages 456--475, 2012.
+
+\bibitem{Percolator2010}
+D.~Peng and F.~Dabek.
+\newblock Large-scale incremental processing using distributed transactions and
+  notifications.
+\newblock In {\em OSDI}, 2010.
+
+\bibitem{Spear2008}
+M.~F. Spear, M.~M. Michael, and C.~von Praun.
+\newblock {RingSTM}: scalable transactions with a single atomic instruction.
+\newblock In {\em SPAA '08}, pages 275--284, 2008.
+
+\bibitem{calvin}
+A.~Thomson, T.~Diamond, S.-C. Weng, K.~Ren, P.~Shao, and D.~J. Abadi.
+\newblock Calvin: Fast distributed transactions for partitioned database
+  systems.
+\newblock In {\em SIGMOD}, 2012.
+
+\bibitem{FDPlus2012}
+R.~Thonangi, S.~Babu, and J.~Yang.
+\newblock A practical concurrent index for solid-state drives.
+\newblock In {\em CIKM}, pages 1332--1341, 2012.
+
+\bibitem{WeikumTIS2001}
+G.~Weikum and G.~Vossen.
+\newblock {\em Transactional Information Systems: Theory, Algorithms, and the
+  Practice of Concurrency Control and Recovery}.
+\newblock Morgan Kaufmann, 2001.
+
+\bibitem{Omid2014}
+M.~Yabandeh, D.~Gomez-Ferro, I.~Kelly, F.~Junqueira, and B.~Reed.
+\newblock Lock-free transactional support for distributed data stores.
+\newblock Accepted to ICDE '14.
+
+\end{thebibliography}

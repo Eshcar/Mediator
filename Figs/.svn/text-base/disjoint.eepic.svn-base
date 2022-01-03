@@ -1,0 +1,24 @@
+% This file was made with: LaTeXPiX  (Build 3681)
+% Coded by: N.J.H.M. van Beurden
+% Email: beurden@email.com
+% Webpage: http://www.beurden.cjb.net
+\setlength{\unitlength}{0.254mm}
+\begin{picture}(260,145)(35,-180)
+        \special{color rgb 0 0 0}\put(80,-95){\makebox(90,35)[cc]{\shortstack{R($z$,$s_0$)}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\path(100,-65)(150,-65)(150,-90)(100,-90)(100,-65) % Plain Solid Rectangle
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\path(225,-120)(275,-120)(275,-145)(225,-145)(225,-120) % Plain Solid Rectangle
+        \special{color rgb 0 0 0}\put(205,-150){\makebox(90,35)[cc]{\shortstack{W($z$,$s_1$)}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\path(165,-65)(215,-65)(215,-90)(165,-90)(165,-65) % Plain Solid Rectangle
+        \special{color rgb 0 0 0}\put(145,-95){\makebox(90,35)[cc]{\shortstack{W($z$,$s_2$)}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\maxovaldiam20\unitlength\put(157,-77){\oval(145,35)} % Plain Oval
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\dottedline{5}(85,-145)(85,-55) % Plain Dotted Line
+        \special{color rgb 0 0 0}\allinethickness{0.254mm}\dottedline{5}(230,-150)(230,-55) % Plain Dotted Line
+        \special{color rgb 0 0 0}\put(75,-55){\makebox(30,20)[cc]{\shortstack{$t_0$}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(220,-55){\makebox(30,15)[cc]{\shortstack{$t_1$}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(205,-180){\makebox(90,35)[cc]{\shortstack{$t_1< t$}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(35,-85){\makebox(30,15)[cc]{\shortstack{$C_1$:}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(35,-145){\makebox(30,15)[cc]{\shortstack{$C_2$:}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(65,-85){\makebox(20,15)[cc]{\shortstack{$tx$}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0}\put(195,-140){\makebox(20,15)[cc]{\shortstack{$op$}}} % Plain FrameBoxed Text
+        \special{color rgb 0 0 0} % Set color to black again (default font color)
+\end{picture}

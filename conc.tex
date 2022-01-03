@@ -1,0 +1,29 @@
+\section{Conclusions}
+\label{sec:conc}
+
+We presented Mediator -- a transaction processing system
+for Web-scale NoSQL databases. Mediator mitigates the consistency 
+gaps that arise when transactional and native operations 
+are allowed to share the same data in a straightforward way. Mediator 
+protects the safety invariants of both API's -- namely, (1) atomic reads 
+and writes for the native traffic, and (2) snapshot isolation or serializability
+for the transactional traffic. 
+
+Mediator provides weak synchronization between two types of logical clocks: 
+the global clock maintained by the transaction processing service, and the 
+local clocks of multiple independent database servers. This temporal
+fencing mechanism installs a logical order between native
+and transactional accesses, despite the fact that the native accesses completely 
+bypass Mediator's infrastructure. The protocol is well-founded, and also 
+extremely lightweight compared to physical clock synchronization.
+
+Mediator preserves the original performance of native traffic, while incurring minor impact on transactional operations. A large-scale evaluation 
+shows that this design choice strikes a favorable tradeoff. Namely, it demonstrates
+that performance-wise, Mediator's approach is superior to automatic transactification 
+of native operations, for a vast majority of our tested workloads. We also
+show that spurious aborts -- the price paid for preserving 
+the best of both worlds -- are very infrequent. 
+%which introduces a considerable overhead, 
+
+
+

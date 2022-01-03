@@ -1,0 +1,187 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{acm_proc_article-sp}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithmicx,algorithm}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage[skip=0pt]{subcaption}
+%\usepackage[tight]{subfigure}
+\usepackage{eepic}
+\usepackage{xcolor}
+
+\newcommand\addtypes[1]{%
+  \lstset{morekeywords=[3]{#1}}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\remove}[1]{}
+\newcommand{\full}[1]{}
+\newcommand{\short}[1]{#1}
+\newcommand{\eshcar}[1]{\noindent{\textcolor{violet}{\{{\bf eshcar:} \em #1\}}}}
+%%%%%%%%%%pseudo code
+\newcommand{\const}[1]{\textsc{#1}}
+\newcommand{\tuple}[1]{\ensuremath{\left\langle {#1} \right\rangle}}
+
+\newcommand{\medserver}{\ensuremath{\mathcal{TSO}}}
+\newcommand{\dbserver}{\ensuremath{\mathcal{DB}}}
+\newcommand{\logger}{\ensuremath{\mathcal{LOG}}}
+
+\begin{document}
+
+%
+% --- Author Metadata here ---
+%\conferenceinfo{SYSTOR}{'14 Haifa, Israel}
+%\CopyrightYear{2014} % Allows default copyright year (20XX) to be over-ridden -
+% IF NEED BE.
+%\crdata{978-1-4503-2920-0}  % Allows default copyright data
+% (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
+% --- End of Author Metadata ---
+
+\title{Reconciling Transactional and Non-Transactional Operations in Distributed Key-Value Stores}
+
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{3} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+\alignauthor
+Edward Bortnikov\\
+       \affaddr{Yahoo Labs}\\
+       \affaddr{Haifa, Israel}\\
+       \email{ebortnik@yahoo-inc.com}
+% 2nd. author
+\alignauthor
+Eshcar Hillel\\
+       \affaddr{Yahoo Labs}\\
+       \affaddr{Haifa, Israel}\\
+       \email{eshcar@yahoo-inc.com}
+% 3rd. author
+\alignauthor 
+Artyom Sharov\titlenote{Research done while interning with Yahoo Labs, Haifa.}\\
+       \affaddr{Technion, CS}\\
+       \affaddr{Haifa, Israel}\\
+       \email{sharov@cs.technion.ac.il}
+}
+
+\date{30 July 1999}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+\input{abstract}
+
+% A category with the (minimum) three required fields
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
+%A category including the fourth, optional field follows...
+%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures,
+% performance measures]
+
+\category{H.2.4}{Database Management}{Systems}[Transaction processing,
+Distributed databases] 
+\terms{Algorithms, Reliability, Performance}
+
+%\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+
+\input{intro}
+\input{overview}
+\input{algorithm}
+\input{eval}
+%\input{models}
+%\input{safety1} 
+\input{related}
+\input{conc}
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+We thank Daniel Gomez-Ferro for his relentless help with 
+explaining Omid's design. We thank Flavio Junqueira, 
+Ronny Lempel and Mark Shovman for stimulating discussions.
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{mediator}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+\balancecolumns
+%\appendix
+%Appendix A
+%\balancecolumns
+% That's all folks!
+\end{document}

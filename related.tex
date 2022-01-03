@@ -1,0 +1,124 @@
+\hyphenation{acr-oss}
+
+\section{Related Work}
+\label{sec:related}
+
+Transaction processing is a textbook area in database research~\cite{WeikumTIS2001,GrayTP1993}.
+It appears in the ANSI SQL standards, 
+%\footnote{\footnotesize{\url{http://www.contrib.andrew.cmu.edu/~shadow/sql/sql1992.txt}}}, 
+as well as in modern NoSQL technologies that took databases to an unprecedented
+scale (e.g.,~\cite{Percolator2010}). The literature defines a wealth of transaction 
+consistency models that capture different perceptions of concurrency control 
+(e.g.,~\cite{Papadimitriou1979, Berenson1995}). Traditionally, client applications 
+sharing a single database instance agree on a single consistency model (or multiple 
+levels thereof that subsume each other), and pay the required performance toll. 
+%Google's recent paper database~\cite{Spanner2012} claims: {\em we believe it is better 
+%to have application programmers deal with performance problems due to overuse of transactions 
+%as bottlenecks arise, rather than always coding around the lack of transactions.} 
+We posit that this approach is not necessarily required, i.e., it is possible 
+to accommodate within the same database two incompatible semantics: 
+multi-operation transactional consistency, and atomic read-write consistency
+appropriate for simple key-value store applications. 
+
+The database community has been reasoning about transaction semantics since the late 
+70's~\cite{Papadimitriou1979}. Serializability %model, which is the most 
+%intuitive way to logically serialize a concurrent execution, 
+has been widely adopted.
+%Two-phase locking is a widely accepted implementation of serializability~\cite{GrayTP1993}. 
+The seminal paper by Berenson et al.~\cite{Berenson1995} %discussed the
+% advantages and drawbacks of serializability and its different relaxations, and 
+introduced the snapshot isolation model. The latter is particularly attractive due to its 
+implementations that improve concurrency. 
+%
+\remove{Fekete et al. laid foundations for making SI executions
+serializable~\cite{FeketeTODS2005}.
+and authored a series of papers comparing the semantics and performance 
+of serializability and snapshot isolation.
+%showed that the semantic gap between the two is small, and 
+A host of later work~\cite{Cahill2008,Ports2012} suggested practical ways of realizing 
+these ideas. Mediator implements both SI and serializability semantics. Its implementation 
+is {\em optimistic} -- it lets multiple transactions proceed without interference until commit, 
+upon which data conflicts are identified, and some transactions might be aborted~\cite{GrayTP1993}. 
+}
+\remove{
+While that paper focused on restructuring the application code to avoid anomalies, Cahill 
+et al.~\cite{Cahill2008} suggested a different approach. Their concurrency control algorithm, 
+Serializable Snapshot Isolation, ensures that every execution is serializable, no matter what the 
+program does. PostgreSQL was the first database product to adopt this algorithm~\cite{Ports2012}.
+}
+
+%Snapshot isolation achieves better overall throughput than serializability, 
+%at the expense of aborting some transactions~\cite{Alomari2008, Cahill2008}. 
+%We show similar results.  
+
+In databases that support range queries, the literature distinguishes between {\em repeatable
+read\/} (RR) and {\em serializability\/} isolation levels, %The former
+% guarantees serial execution.The latter 
+which subsumes RR, and extends it with a requirement of avoiding {\em phantom
+reads\/} (returning two different tuple sets for the same key range to two queries running under the same 
+transaction~\cite{GrayTP1993}).  Should Mediator be extended to support
+predicate queries, it can use the same transaformation technique
+by Fekete et al.~\cite{FeketeTODS2005} to get a phantom-free serializable
+implementation.
+% phantom freedom through range-sensitive conflict resolution,
+%however this is not essential for its core algorithm.
+  
+Early NoSQL databases, e.g., Google Bigtable~\cite{BigTable2006}, Yahoo! 
+PNUTS~\cite{PNUTS2008} and Apache HBase sacrifice strong consistency for extreme 
+scalability. Their safety guarantee is single-key atomic reads and writes~\cite{AttiyaDC2004}. 
+Google Percolator technology~\cite{Percolator2010} supports multi-operation transactions in Bigtable for incremental maintenance 
+of its search index. Percolator
+%, which is embedded in Bigtable, 
+implements snapshot isolation through database locks. Omid, a transaction 
+processor for HBase~\cite{Omid2014}, supports snapshot isolation with a
+lock-free protocol. Omid also implements serializability~\cite{OmidEurosys2012}.
+%its implementation is external to the database. 
+Mediator's design bears similarity with Omid,
+however, its algorithm is profoundly different, to capture the new safety properties. 
+
+Google Spanner~\cite{Spanner2012} provides distributed transactions 
+across datacenter with a blend of SI (for read-only transactions) and serializability guarantees. 
+Spanner implements lock-free read-only transactions and lock-based read-write
+transactions. 
+%It coordinates locks through a synchronous protocol that can
+%tolerate limited discrepancies among physical clocks across multiple locations.
+Calvin~\cite{calvin} also addresses globally distributed transactions, albeit in
+a different way. It replaces locking with deterministic scheduling that orders
+transactions through a global consensus service. 
+%Similarly to other transaction processing systems,
+SCORe~\cite{Peluso2012} is a serializable partial replication protocol that
+guarantees read operations always access a consistent snapshot. It applies a
+timestamp management scheme to synchronize the nodes handling the
+transaction. Neither one of the above
+%Spanner nor Calvin
+provide any consistency guarantees to hybrid workloads targeted by Mediator. 
+%Investigating how to adapt 
+%Mediator to multi-datacenter environments is beyond the scope of our work.
+
+\remove{In a way, Mediator challenges the generic claim in~\cite{Spanner2012}:
+``We believe it is better to have application programmers deal with performance problems 
+due to overuse of transactions as bottlenecks arise, rather than always coding around 
+the lack of transactions.''}
+
+%TM
+\emph{Transactional memory} (TM)~\cite{Herlihy2008} is a popular approach for alleviating the difficulty of programming concurrent applications for multi-core and multiprocessing systems. 
+TM allows concurrent processes synchronize via in-memory transactions.
+\remove{
+In practice, TM must allow accessing the same items from inside and outside a transaction; this is crucial both for interoperability with legacy code and for improving the performance of the TM. \emph{Privatization}
+mechanisms~\cite{Herlihy2008} allow the programmer to ``isolate'' some items making them private to a process. 
+The process can thereafter access them non-transactionally, without interfering with other processes.
+}
+%RingSTM
+Our TSO implementation is inspired by %Spear et al.'s work on 
+RingSTM~\cite{Spear2008} -- an %the first TM 
+implementation that allows accessing the same items from inside and outside a transaction.
+%is inherently livelock-free, while at the same time permitting parallel write-back by concurrent disjoint transactions. 
+%In RingSTM, transactions commit by enqueuing an entry onto a global ring,
+%and represent their read and write sets by Bloom filters. 
+RingSTM is not geared for distributed environments, 
+hence our challenges are different.
+%thus reducing the overhead of metadata manipulation and inspection. 
+
+
+
+

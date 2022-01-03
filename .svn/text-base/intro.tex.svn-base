@@ -1,0 +1,149 @@
+\hyphenation{No-SQL}
+\hyphenation{da-ta-ba-ses}
+\hyphenation{ser-vers}
+\hyphenation{pa-ra-mount}
+
+\section{Introduction}
+\label{sec:intro}
+
+% Scale, scale, scale
+Modern Internet applications employ data stores that scale to the entire population 
+of online users. For example, personalized content recommendation services  require 
+maintaining profiles for hundreds of millions of unique users. Traditional SQL data 
+management systems cannot scale up with these requirements, leading to a new generation 
+of not-only-SQL, or NoSQL, databases -- e.g., Google's Bigtable~\cite{BigTable2006}, Apache Hadoop HBase\footnote{\small{\url{http://hbase.apache.org/}}}, etc. These technologies have been designed 
+for extreme simplicity (key-value store API), scalability (data partitioning across thousands of machines), 
+and reliability (redundant storage). In parallel, the proliferation of affordable high-end hardware 
+(multi-core CPU's, inexpensive RAM, SSD storage) enabled building NoSQL databases capable of serving 
+data at memory speeds~\cite{Corfu2012,RAMCloud2011,FDPlus2012}.
+
+% Transactions are great
+Historically, NoSQL databases only allowed atomic reads and writes of individual items. 
+More recent systems (e.g., Google's Percolator~\cite{Percolator2010} and HBase's 
+Omid\footnote{\small{\url{https://github.com/yahoo/omid}}}~\cite{Omid2014})
+introduce transaction processing~\cite{GrayTP1993} for complex applications that
+require ACID semantics while accessing multiple items. NoSQL transaction processors
+implement consistency models extensively studied by the database community~\cite{Papadimitriou1979, FeketeTODS2005}.
+They have been shown to scale well with the database size. 
+
+% We have a problem
+Transaction processing does not come for free. Every transaction incurs latency penalties at its begin 
+and commit boundaries. In throughput-oriented applications that perform long
+transactions latency is not of big concern, and indeed the overhead is minor~\cite{Omid2014}. 
+However, it is well-pronounced in online, interactive settings, which are
+the main focus of this work.
+The faster the underlying database is, the larger the toll. Table~\ref{tab:latencies} exemplifies the impact of ``transactifying'' HBase 
+reads and writes by Omid in a high-speed environment (fully evaluated in
+Section~\ref{sec:eval}).
+Latencies start growing as every operation is framed as a transaction (column
+2).
+They double as part of the traffic is batched in short and long transactions
+(columns 3 and 4, respectively).
+
+%\setlength{\belowcaptionskip}{0pt}
+\setlength{\abovecaptionskip}{3pt}
+\begin{table} [t]
+\centering{
+\begin{tabular}{ccccc}
+%& {\bf \small{Native}} & {\bf \small{Transactified}} & {\bf
+%\small{Transactified} }    & {\bf \small{Transactified} } \\
+& {\bf native} & {\bf trans} & {\bf
+trans }    & {\bf trans } \\
+%&                    &                              & {\bf short transactions}
+% & {\bf medium-size transactions} \\
+&                    &        {\bf + none }         & {\bf + short
+} & {\bf + long } \\
+%&                    &                              & {\bf in the background} &
+% {\bf in the background} \\
+\hline
+{\bf Read}  & 3.9 & 5.2 & 6.0 & 9.2 \\
+{\bf Write}  & 8.3 & 9.5 & 10.3 & 14.0  \\
+\end{tabular}
+}
+\caption{\bf{\small{The impact of transactification
+(\emph{trans}) on HBase \emph{native} operations latencies (ms).
+Transaction processing adds a surplus that grows with the length of transactions
+executed in the background (\emph{none}, \emph{short}, \emph{long}).
+}}}
+\label{tab:latencies}
+\end{table}
+
+% Why this is nontrivial
+We would like to avoid automatically converting the atomic database operations
+into transactions. Unfortunately, running them side by side with transactional traffic on shared data 
+without any coordination is error-prone. Consider, for example, an imaginary social application, 
+in which user statuses can be either directly posted by the users, or speculated by the system, 
+based on a variety of signals (status history, location, time of day, sensor data, friends' posts,  etc.). 
+In the latter case, the system updates the status unless the user has recently
+posted a new one.
+Therefore, it performs a transaction that (1) reads the user's status, and possibly some other data, 
+(2) does some computation, and (3) writes the status back. In contrast, a human-originated status 
+update is blind -- it must complete in the real time, and needs not be transactional. In a %na\"{\i}ve 
+non-coordinated implementation, the transaction is not aware of this update,
+and may overwrite it with a stale speculated value.
+%, so the update is \emph{lost}.
+
+An additional problem with the non-coordinated design is exposure to uncommitted data.
+The transaction processing layer prevents transactions from reading each other
+intermediate modifications that may eventually roll-back~\cite{GrayTP1993}.
+However, in a heterogeneous environment, native reads can retrieve transaction's
+\emph{dirty} writes.
+
+% Goal and challenge
+Our goal is to preserve the original performance of native operations while
+maintaining the familiar consistency guarantees for them as well as for
+transactions. This challenge is amplified in distributed databases, in which the data is partitioned among 
+multiple servers. In this context, any solution must take care not to impede
+the datapath scalability, by introducing minimum synchronization.     
+
+We present {\em Mediator} --- Mixed Database Access Transaction Oracle --- 
+a scalable transaction processor that %allows to benefit from both worlds. 
+guarantees data consistency in the presence of native operations. To the best 
+of our knowledge, this problem has not been addressed by the database community before. 
+%The contributions of our work are as follows.
+
+%Theoretical model
+\remove{We establish a formal definition of the consistency model for systems
+supporting transactions and native operations, and prove Mediator's compliance
+with it.}
+We establish a consistency model for systems
+supporting transactions and native operations. Namely, we extend the popular
+{\em serializability\/}~\cite{Papadimitriou1979} and {\em snapshot isolation\/} (SI)~\cite{FeketeTODS2005} models to accommodate 
+the native traffic semantics. The extension is not straightforward since native operations 
+are not captured as transactions, and the consistency requirements are relaxed for them. 
+The formal definition of the models and Mediator's correctness proofs are
+deferred to the full version of this paper~\cite{full}.
+
+%Distributed Algorithm
+%We present an algorithm that satisfies the required safety properties.
+Similarly to earlier work~\cite{WeikumTIS2001,Omid2014}, 
+Mediator exploits multi-version concurrency control at the database layer 
+to implement its consistency model. The unique challenge is installing 
+a logical order between transactions, which are ordered by a centralized logical 
+clock, and native operations, accessing multiple independent 
+servers. We introduce \emph{temporal fencing\/} -- a novel protocol that
+loosely synchronizes the servers' local clocks with the global clock. 
+The algorithm trades performance optimization of native operations 
+for an extra overhead imposed on transactions. 
+
+We implement a working prototype of Mediator on top of HBase, and extensively evaluate it 
+on a distributed testbed. We study Mediator's performance tradeoffs by comparing
+it to an Omid-powered system that automatically converts native operations into transactions. The results 
+emphasize the performance impact incurred to native traffic by Omid.
+More importantly, we show that Mediator's {\em overall\/} system performance is superior 
+for a vast majority of the considered mixed traffic patterns. In particular, its throughput 
+is higher for all workloads that contain at least $50\%$ native operations. 
+%Therefore, a slight overhead incurred to the transactional traffic is justified 
+%by preserving the native traffic's performance. 
+%The bulkier the transactional traffic is, the more advantageous our system becomes. 
+
+The rest of this paper is structured as follows. Section~\ref{sec:overview} sketches Mediator's system architecture. 
+Section~\ref{sec:semantics}  
+informally presents mixed traffic semantics, and 
+Section~\ref{sec:algorithm} describes the algorithms implementing two
+consistency models.
+Section~\ref{sec:eval} depicts and analyzes the evaluation results. 
+%Rigorous model definition and correctness proofs appear in
+% Section~\ref{sec:correctness}.
+Finally, we survey related work in Section~\ref{sec:related}, 
+and conclude with Section~\ref{sec:conc}.

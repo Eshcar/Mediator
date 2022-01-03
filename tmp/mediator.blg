@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2013)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: mediator.aux
+The style file: abbrv.bst
+Database file #1: mediator.bib
+Warning--empty booktitle in Omid2014
+Warning--empty year in Omid2014
+You've used 25 entries,
+            2118 wiz_defined-function locations,
+            648 strings with 7291 characters,
+and the built_in function-call counts, 9398 in all, are:
+= -- 884
+> -- 482
+< -- 8
++ -- 196
+- -- 164
+* -- 613
+:= -- 1502
+add.period$ -- 75
+call.type$ -- 25
+change.case$ -- 152
+chr.to.int$ -- 0
+cite$ -- 27
+duplicate$ -- 392
+empty$ -- 756
+format.name$ -- 164
+if$ -- 2006
+int.to.chr$ -- 0
+int.to.str$ -- 25
+missing$ -- 28
+newline$ -- 128
+num.names$ -- 50
+pop$ -- 211
+preamble$ -- 1
+purify$ -- 130
+quote$ -- 0
+skip$ -- 282
+stack$ -- 0
+substring$ -- 507
+swap$ -- 110
+text.length$ -- 8
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 92
+warning$ -- 2
+while$ -- 84
+width$ -- 27
+write$ -- 267
+(There were 2 warnings)

@@ -1,0 +1,94 @@
+\subsection{Database Support}
+\label{sec:si:database}
+
+\remove{
+This section presents the changes to the database server code to support mixed traffic access.
+%The main novelty we introduce here is a simple structure capturing the timestamp that is assigned to native put and get operations. 
+Their core is a new policy for managing the server's logical clock. 
+The latter is synchronized with the global clock upon transactional accesses, 
+and is locally incremented upon native puts. 
+%Recall that the timestamp-based API is deprecated for external native operation usage, however we use it internally as part of our adaptations.
+}
+
+The database code adjustments for Mediator are modest. They summarize to 
+a new policy for managing the server's local clock. Local clocks synchronize 
+with the global clock upon transactional accesses, and incremented upon 
+native puts. Algorithm~\ref{alg:db} depicts the implementation.
+
+A native get simply retrieves the latest version of the data item. 
+A native put atomically increments the clock and writes the new timestamped 
+version to the database. 
+A transactional get %, on the other hand, is more complicated. First it 
+synchronizes the clock with the transaction's timestamp\full{(line~\ref{line:syncget})},
+which becomes a temporal fence,
+and returns the latest version prior to this
+timestamp\full{(line~\ref{line:txget})}.
+A transactional put simply invokes the timestamp-based put API. % (omitted for shortness). 
+The {\sc txCheckConflict} method (invoked upon commit) tests whether a set of 
+timestamped key-value tuple has been modified by native puts prior
+to timestamp $ts$.
+The server's clock is atomically synchronized with $ts$\full{(line~\ref{line:syncconf})},
+which becomes a temporal fence. 
+
+\remove{
+Each $\tuple{k, v, t_0}$ tuple in the set is tested 
+for the presence of a conflicting put to $k$ during $\left[ t_0, t_1 \right]$. 
+Assigning $t_1$ as a temporal fence ensures that no later native put can invalidate 
+this assertion (see Lemma~\ref{lemma:ring}).}
+%In an SI implementation the write set is tested. As the timestamps of all items in the write set are set to the start timestamp of the transaction, the test in the database translates into identifying write-write conflicts during the time interval of the transaction (from start to commit time).
+
+\remove{
+The details are presented in Algorithm~\ref{alg:db}. A \emph{native get} operation simply retrieves the last version of the key (line~\ref{line:natget}). A \emph{native put} operation increases the server's clock (line~\ref{line:cpp}), 
+%then acquires the timestamp of the operation (line~\ref{line:natts}), 
+and then writes a new version via the timestamp-based put API (line~\ref{line:natput}).
+A \emph{transactional get\/} %, on the other hand, is more complicated. First it 
+synchronizes the clock with the transaction's timestamp (line~\ref{line:syncget}), 
+and then retrieves the last value of the key that was written prior to this timestamp (line~\ref{line:txget}). 
+A \emph{transactional put} simply invokes the timestamp-based put API (omitted from the code). 
+}
+
+
+%The method returns a negative indication if a value in the set has been  modified %(lines~\ref{line:dbconf}-\ref{line:dbfalse}), and a positive indication otherwise (line~\ref{line:dbtrue}).
+
+\addtypes{struct,class,Transaction,Ring,TxEntry,Set,Map,KeyValVersion,Key,Val,Timestamp,long,Status,BloomFilter}
+
+\begin{algorithm} [tb]
+\small
+\caption{\dbserver\ methods} \label{alg:db}
+\begin{algorithmic}[1]
+\makeatletter\setcounter{ALG@line}{80}\makeatother
+
+%\Statex\Comment{native operations}
+\Function{get}{Key $key$} \Comment{atomic}
+	\State \Return lastVersion($key$)\label{line:natget}
+\EndFunction
+\vspace{7pt}
+\Function{put}{Key $key$, Val $val$} \Comment{atomic}
+	\State $clock \gets clock + \delta$ \label{line:cpp}
+	%\State $nativeTS \gets clock$ \label{line:natts}
+	\State put($key$, $val$, $clock$) \label{line:natput}
+\EndFunction
+\vspace{7pt}
+%\Statex\Comment{transactional operations}
+\Function{txGet}{Key $key$, Timestamp $ts$}
+	\State sync($ts$) \label{line:syncget}
+	\State \Return lastVersionBefore($key$, $ts$) \label{line:txget}
+\EndFunction
+\vspace{7pt}
+\Function{txCheckConflict}{Set$\tuple{KeyValVersion}$ items, Timestamp $ts$}
+	\State sync($ts$)\label{line:syncconf}
+	\ForAll{$item \in items$} \label{line:eachitem}
+		\State $\tuple{val,ts_{val}} \gets$ lastVersionBefore($item.key$,$ts$) 
+		\If{$item.ts < ts_{val}$} \label{line:dbconf}
+			\State \Return \const{false} \Comment{conflict - not ok} \label{line:dbfalse}
+		\EndIf
+	\EndFor
+	\State \Return \const{true} \Comment{no conflict - ok} \label{line:dbtrue}
+\EndFunction
+\vspace{7pt}
+\Function{sync}{Timestamp $ts$} \Comment{atomic}
+	\State $clock \gets \max\left\{ts,clock\right\}$ \Comment{temporal fence}\label{line:advnatts}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+

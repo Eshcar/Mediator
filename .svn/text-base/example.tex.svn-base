@@ -1,0 +1,46 @@
+\section{Motivating Example}
+\label{sec:example}
+
+Consider a mobile-commerce recommender system where users {\em check-in\/} 
+in the new locations they arrive to, and before long receive a personalized
+recommendation of local businesses or deals. The suggestion is based 
+on a collaborative filtering model~\cite{KorenAdvancesCF2011} learned from the 
+shopping data -- i.e., similar items are recommended to users with similar traits. 
+
+Figure~\ref{fig:example} depicts the system's implementation. For each item, the {\sc Items} table 
+holds its mathematical model and location. The {\sc Users} 
+table holds, for each user, the model, current location, and the recommendation. 
+The database is updated both directly by the mobile users that consume the 
+recommendations and update the locations, and by a backend process that continuously 
+updates the stale recommendations. The recommendation is invalidated (erased) upon 
+the user's check-in in a new location.
+
+The backend process consists of two parts -- model update and suggestion computation. 
+The former consumes a stream of $\langle user, item, rating\rangle$ interaction events,
+and updates the user and item models for each event. 
+The latter scans the users with empty recommendations, and for 
+each user (1) ranks the co-located items using the user and item models, and 
+(2) updates the recommendation with the top results.
+
+Both backend jobs access multiple tables for read and write. In order to update the  
+models or to compute the recommendations in a consistent way, they need to employ 
+transactions. However, the check-in is a ``blind-write'' that has no reason to be 
+transactified. On the contrary, it is part of an interactive flow, and hence, 
+any transaction-processing overhead is undesirable for it. However, serving it with 
+the native database API is unsafe. Since the transaction processing infrastructure 
+is unaware of native updates, some transaction might simply run over one. 
+For example, a recommendation invalidated by a new check-in might be overwritten by the 
+values corresponding to the user's previous location, hence the user might not receive 
+a fresh suggestion on time. In this context, the expected behavior of the 
+backend pipeline would be to detect the conflict, roll its transaction back, 
+and re-compute the result. 
+
+\begin{figure}
+\includegraphics[width=3.3in]{Figs/example.epsi}
+\vskip .1in
+\caption{\bf{\small{Motivating example -- an m-commerce system that computes local 
+business recommendations for mobile users. The system combines online native data 
+accesses with offline flows that use transactions. }}}
+\label{fig:example}
+%\vskip -.2in
+\end{figure}

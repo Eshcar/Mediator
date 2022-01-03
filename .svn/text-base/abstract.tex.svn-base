@@ -1,0 +1,22 @@
+\begin{abstract}
+
+NoSQL databases were initially designed to provide extreme scalability and
+availability for Internet applications, often at the expense of data consistency. The recent generation
+of Web-scale databases fills this gap, by offering transaction support. However, transaction
+processing implies a significant performance overhead on online applications
+that only require atomic reads and writes. The state-of-the-art solutions are either static separation 
+of the data accessed by transaction-enabled and native applications, or complete 
+``transactification'' of the latter, which are both inadequate. 
+
+We present a scalable transaction processor, {\em Mediator}, that enjoys the best of 
+both worlds. It preserves the latencies of atomic reads and writes, without compromising 
+data safety. We introduce a lightweight synchronization protocol that enables conflict 
+resolution between transactions and native operations that share data in a distributed
+database. We evaluate Mediator's implementation on top of the HBase key-value store 
+on a large-scale testbed, and show that it substantially outperforms 
+the traditional approach on a vast majority of mixed workloads.
+In particular, Mediator achieves a significantly larger throughput for all 
+workloads in which the fraction of native operations exceeds $50\%$.
+
+%despite a slight overhead incurred to the transactional traffic, 
+\end{abstract}

@@ -1,0 +1,139 @@
+\documentclass{sig-alternate}
+%\documentclass{acm_proc_article-sp}
+
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithmicx,algorithm}
+\usepackage{listings}
+\usepackage{paralist}
+\usepackage[skip=0pt]{subcaption}
+%\usepackage[tight]{subfigure}
+\usepackage{eepic}
+\usepackage{xcolor}
+
+\newcommand\addtypes[1]{%
+  \lstset{morekeywords=[3]{#1}}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\remove}[1]{}
+\newcommand{\full}[1]{}
+\newcommand{\short}[1]{#1}
+\newcommand{\eshcar}[1]{\noindent{\textcolor{violet}{\{{\bf eshcar:} \em #1\}}}}
+%%%%%%%%%%pseudo code
+\newcommand{\const}[1]{\textsc{#1}}
+\newcommand{\tuple}[1]{\ensuremath{\left\langle {#1} \right\rangle}}
+
+\newcommand{\medserver}{\ensuremath{\mathcal{TSO}}}
+\newcommand{\dbserver}{\ensuremath{\mathcal{DB}}}
+\newcommand{\logger}{\ensuremath{\mathcal{LOG}}}
+
+\begin{document}
+%
+% --- Author Metadata here ---
+\permission{Permission to make digital or hard copies of all or part of
+this work for personal or classroom use is granted without fee provided 
+that copies are not made or distributed for profit or commercial advantage 
+and that copies bear this notice and the full citation on the first page. 
+Copyrights for components of this work owned by others than the author(s) 
+must be honored. Abstracting with credit is permitted. To copy otherwise, 
+or republish, to post on servers or to redistribute to lists, requires 
+prior specific permission and/or a fee. Request permissions from 
+Permissions@acm.org.}
+\conferenceinfo{SYSTOR '14}{June 10-12 2014, Haifa, Israel}
+\CopyrightYear{2014} % Allows default copyright year (20XX) to be over-ridden -
+% IF NEED BE.
+\crdata{978-1-4503-2920-0/14/06\\ DOI 10.1145/2611354.2611366}  %
+% Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
+% --- End of Author Metadata ---
+
+\title{Reconciling Transactional and Non-Transactional Operations in Distributed Key-Value Stores}
+%
+
+
+\numberofauthors{3} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+%
+% 1st. author
+\alignauthor
+Edward Bortnikov\\
+       \affaddr{Yahoo Labs}\\
+       \affaddr{Haifa, Israel}\\
+       \email{ebortnik@yahoo-inc.com}
+% 2nd. author
+\alignauthor
+Eshcar Hillel\\
+       \affaddr{Yahoo Labs}\\
+       \affaddr{Haifa, Israel}\\
+       \email{eshcar@yahoo-inc.com}
+% 3rd. author
+\alignauthor 
+Artyom Sharov\titlenote{Research done while interning with Yahoo Labs, Haifa.}\\
+       \affaddr{Technion, CS}\\
+       \affaddr{Haifa, Israel}\\
+       \email{sharov@cs.technion.ac.il}
+}
+
+\date{30 July 1999}
+% Just remember to make sure that the TOTAL number of authors
+% is the number that will appear on the first page PLUS the
+% number that will appear in the \additionalauthors section.
+
+\maketitle
+\input{abstract}
+
+% A category with the (minimum) three required fields
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
+%A category including the fourth, optional field follows...
+%\category{D.2.8}{Software Engineering}{Metrics}[complexity measures,
+% performance measures]
+
+\category{H.2.4}{Database Management}{Systems}[Transaction processing,
+Distributed databases] 
+\terms{Algorithms, Reliability, Performance}
+%\keywords{search engine caching, real-time indexing}
+
+\input{intro}
+\input{overview}
+\input{algorithm}
+\input{eval}
+%\input{models}
+%\input{safety1} 
+\input{related}
+\input{conc}
+
+
+
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+We thank Daniel Gomez-Ferro for his relentless help with 
+explaining Omid's design. We thank Flavio Junqueira, 
+Ronny Lempel and Mark Shovman for stimulating discussions.
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{mediator}  % sigproc.bib is the name of the Bibliography in this
+% case You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+%APPENDICES are optional
+%\balancecolumns
+%\renewcommand{\full}[1]{#1}
+%\renewcommand{\short}[1]{}
+%\appendix
+
+\end{document}

@@ -1,0 +1,204 @@
+\relax 
+\citation{BigTable2006}
+\citation{Corfu2012}
+\citation{RAMCloud2011}
+\citation{FDPlus2012}
+\citation{Percolator2010}
+\citation{Omid2014}
+\citation{GrayTP1993}
+\citation{Papadimitriou1979}
+\citation{FeketeTODS2005}
+\citation{Omid2014}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{\thepage }}
+\newlabel{sec:intro}{{1}{\thepage }}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{The impact of transactification (\emph  {trans}) on HBase \emph  {native} operations latencies (ms). Transaction processing adds a surplus that grows with the length of transactions executed in the background (\emph  {none}, \emph  {short}, \emph  {long}). }}\relax }}{\thepage }}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{tab:latencies}{{1}{\thepage }}
+\citation{GrayTP1993}
+\citation{Papadimitriou1979}
+\citation{FeketeTODS2005}
+\citation{full}
+\citation{WeikumTIS2001}
+\citation{Omid2014}
+\citation{GrayTP1993}
+\citation{Omid2014}
+\citation{Bloom1970}
+\citation{Omid2014}
+\citation{Percolator2010}
+\citation{Omid2014}
+\citation{GrayTP1993}
+\@writefile{toc}{\contentsline {section}{\numberline {2}System Overview}{\thepage }}
+\newlabel{sec:overview}{{2}{\thepage }}
+\citation{Bookkeeper2013}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Mediator architecture. The transaction manager (Mediator client) employs three backend services -- the database, the log, and the transaction status oracle (TSO). The database serves native clients directly, and provides Mediator clients with a backdoor API. }}\relax }}{\thepage }}
+\newlabel{fig:mediator_arch}{{1}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Mixed Traffic Semantics}{\thepage }}
+\newlabel{sec:semantics}{{3}{\thepage }}
+\newlabel{fig:mixedaccess}{{2a}{\thepage }}
+\newlabel{sub@fig:mixedaccess}{{a}{\thepage }}
+\newlabel{fig:temporalfence}{{2b}{\thepage }}
+\newlabel{sub@fig:temporalfence}{{b}{\thepage }}
+\newlabel{fig:disjoint}{{2c}{\thepage }}
+\newlabel{sub@fig:disjoint}{{c}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Execution example: transaction $tx$ (process $C_1$) versus a native put $op$ (process $C_2$).}}\relax }}{\thepage }}
+\newlabel{fig:mixed}{{2}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Mediator Algorithm}{\thepage }}
+\newlabel{sec:algorithm}{{4}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Temporal Fences}{\thepage }}
+\newlabel{sec:temporal fences}{{4.1}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Transaction Manager Implementation}{\thepage }}
+\newlabel{sec:si:client}{{4.2}{\thepage }}
+\citation{Omid2014}
+\citation{Bloom1970}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces \relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep {\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }Mediator API implementation - get and commit (snapshot isolation)\relax }}{\thepage }}
+\newlabel{alg:client}{{1}{\thepage }}
+\newlabel{line:retryget}{{3}{\thepage }}
+\newlabel{line:getlast}{{4}{\thepage }}
+\newlabel{line:islatest}{{5}{\thepage }}
+\newlabel{line:addread}{{6}{\thepage }}
+\newlabel{line:retval}{{7}{\thepage }}
+\newlabel{line:abortnotlatest}{{8}{\thepage }}
+\newlabel{line:abortget}{{8}{\thepage }}
+\newlabel{line:readonly}{{12}{\thepage }}
+\newlabel{line:localupdate}{{15}{\thepage }}
+\newlabel{line:trycommit}{{17}{\thepage }}
+\newlabel{line:writevals}{{19}{\thepage }}
+\newlabel{line:checktso}{{22}{\thepage }}
+\newlabel{line:aborttso}{{24}{\thepage }}
+\newlabel{line:negtso}{{25}{\thepage }}
+\newlabel{line:dbwritekeys}{{27}{\thepage }}
+\newlabel{line:dbreadkeys}{{29}{\thepage }}
+\newlabel{line:checknat}{{30}{\thepage }}
+\newlabel{line:abortdb}{{32}{\thepage }}
+\newlabel{line:abort}{{33}{\thepage }}
+\newlabel{line:negdb}{{34}{\thepage }}
+\newlabel{line:trycommitok}{{35}{\thepage }}
+\newlabel{line:wal}{{37}{\thepage }}
+\newlabel{line:batch}{{38}{\thepage }}
+\newlabel{line:commit}{{39}{\thepage }}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces \relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep {\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }\ensuremath  {\mathcal  {TSO}}\ methods (snapshot isolation)\relax }}{\thepage }}
+\newlabel{alg:medserver}{{2}{\thepage }}
+\newlabel{line:lessthanmin}{{52}{\thepage }}
+\newlabel{line:tsonotok}{{53}{\thepage }}
+\newlabel{line:writeset}{{54}{\thepage }}
+\newlabel{line:tsowritekeys}{{57}{\thepage }}
+\newlabel{line:tsoreadkeys}{{59}{\thepage }}
+\newlabel{line:confkeys}{{59}{\thepage }}
+\newlabel{line:append}{{60}{\thepage }}
+\newlabel{line:committs}{{63}{\thepage }}
+\newlabel{line:tailtohead}{{64}{\thepage }}
+\newlabel{line:notconc}{{66}{\thepage }}
+\newlabel{line:tsocheckconf}{{67}{\thepage }}
+\newlabel{line:intersect}{{68}{\thepage }}
+\newlabel{line:appendnotok}{{69}{\thepage }}
+\newlabel{line:appendentry}{{70}{\thepage }}
+\newlabel{line:appendtail}{{70}{\thepage }}
+\newlabel{line:appendok}{{71}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Transaction Status Oracle Implementation}{\thepage }}
+\newlabel{sec:si:server}{{4.3}{\thepage }}
+\citation{Cahill2008}
+\citation{FeketeTODS2005}
+\citation{FeketeTODS2005}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces \ensuremath  {\mathcal  {DB}}\ methods\relax }}{\thepage }}
+\newlabel{alg:db}{{3}{\thepage }}
+\newlabel{line:natget}{{82}{\thepage }}
+\newlabel{line:cpp}{{84}{\thepage }}
+\newlabel{line:natput}{{85}{\thepage }}
+\newlabel{line:syncget}{{87}{\thepage }}
+\newlabel{line:txget}{{88}{\thepage }}
+\newlabel{line:syncconf}{{90}{\thepage }}
+\newlabel{line:eachitem}{{91}{\thepage }}
+\newlabel{line:dbconf}{{93}{\thepage }}
+\newlabel{line:dbfalse}{{94}{\thepage }}
+\newlabel{line:dbtrue}{{95}{\thepage }}
+\newlabel{line:advnatts}{{97}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Database Support}{\thepage }}
+\newlabel{sec:si:database}{{4.4}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Supporting Serializability}{\thepage }}
+\newlabel{sec:ser}{{4.5}{\thepage }}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Adaptation for serializability support\relax }}{\thepage }}
+\newlabel{alg:ser}{{4}{\thepage }}
+\newlabel{line:ser:get}{{103}{\thepage }}
+\newlabel{line:ser:localupdate}{{110}{\thepage }}
+\newlabel{line:ser:trycommit}{{112}{\thepage }}
+\newlabel{line:ser:readonly}{{114}{\thepage }}
+\newlabel{line:ser:writevals}{{115}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Evaluation}{\thepage }}
+\newlabel{sec:eval}{{5}{\thepage }}
+\citation{FDPlus2012}
+\citation{YCSB2010}
+\citation{Bookkeeper2013}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Environment}{\thepage }}
+\newlabel{sec:testing platform}{{5.1}{\thepage }}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep {\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Workload parameter notation.}}\relax }}{\thepage }}
+\newlabel{tab:notation}{{2}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Numerical Results -- Snapshot Isolation}{\thepage }}
+\newlabel{sec:tests:si}{{5.2}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Transaction processing's performance overhead on gets and puts. (a) Latency perspective. HBase compared to Omid's single-operation ($\mathcal  {U}_{1}$) transactions, with larger transactions in the background. Fixed number of clients ($C=200$), running read ratio ($0 \leq \rho \leq 1$). (b,c) Throughput-Latency perspective. HBase compared to Omid's and Mediator's $\mathcal  {U}_{1}$ transactions. Running number of clients ($5 \leq C \leq 500$).} }\relax }}{\thepage }}
+\newlabel{fig:txn_only_si}{{3}{\thepage }}
+\newlabel{fig:heatmap}{{4a}{\thepage }}
+\newlabel{sub@fig:heatmap}{{a}{\thepage }}
+\newlabel{fig:curves}{{4b}{\thepage }}
+\newlabel{sub@fig:curves}{{b}{\thepage }}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Comfort zones of Mediator and Omid, for a variety of read-write mixes ($0 \leq \rho \leq 1$) and transactional-native mixes ($0 \leq \nu \leq 1$). The workload is generated by $200$ clients. }}\relax }}{\thepage }}
+\newlabel{fig:equilibrium}{{4}{\thepage }}
+\citation{Corfu2012}
+\citation{Alomari2008}
+\citation{Cahill2008}
+\citation{WeikumTIS2001}
+\citation{GrayTP1993}
+\citation{Percolator2010}
+\citation{Papadimitriou1979}
+\citation{Berenson1995}
+\citation{Papadimitriou1979}
+\citation{Berenson1995}
+\citation{GrayTP1993}
+\citation{FeketeTODS2005}
+\citation{BigTable2006}
+\citation{PNUTS2008}
+\citation{AttiyaDC2004}
+\citation{Percolator2010}
+\citation{Omid2014}
+\citation{OmidEurosys2012}
+\citation{Spanner2012}
+\citation{calvin}
+\citation{Peluso2012}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces \bf  {\relax \fontsize  {8}{9pt}\selectfont  \abovedisplayskip 7.6pt plus 3pt minus 4pt\belowdisplayskip \abovedisplayskip \abovedisplayshortskip \z@ plus2pt\belowdisplayshortskip 3.6pt plus2pt minus 2pt \def \leftmargin \leftmargini \parsep 3.6pt plus 2pt minus 1pt\topsep 7.2pt plus 2pt minus 4pt\itemsep 3.6pt plus 2pt minus 1pt{\leftmargin \leftmargini \topsep 4pt plus 2pt minus 2pt\parsep 2pt plus 1pt minus 1pt \itemsep \parsep }{Breakdown of internal API request latencies, for the $\mathcal  {U}_{4}$ workload ($\rho =0.5, \nu =0$), with a varying number of clients. The database and the logger layers are the execution bottlenecks.}}\relax }}{\thepage }}
+\newlabel{fig:latency_breakdown}{{5}{\thepage }}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Numerical Results -- Serializability}{\thepage }}
+\newlabel{sec:tests:ser}{{5.3}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Related Work}{\thepage }}
+\newlabel{sec:related}{{6}{\thepage }}
+\citation{Herlihy2008}
+\citation{Spear2008}
+\bibstyle{abbrv}
+\bibdata{mediator}
+\bibcite{Alomari2008}{1}
+\bibcite{AttiyaDC2004}{2}
+\bibcite{Corfu2012}{3}
+\bibcite{Berenson1995}{4}
+\bibcite{Bloom1970}{5}
+\bibcite{full}{6}
+\bibcite{Cahill2008}{7}
+\bibcite{BigTable2006}{8}
+\bibcite{PNUTS2008}{9}
+\bibcite{YCSB2010}{10}
+\bibcite{Spanner2012}{11}
+\bibcite{RAMCloud2011}{12}
+\bibcite{FeketeTODS2005}{13}
+\bibcite{OmidEurosys2012}{14}
+\bibcite{GrayTP1993}{15}
+\bibcite{Herlihy2008}{16}
+\bibcite{Bookkeeper2013}{17}
+\bibcite{Papadimitriou1979}{18}
+\bibcite{Peluso2012}{19}
+\bibcite{Percolator2010}{20}
+\bibcite{Spear2008}{21}
+\bibcite{calvin}{22}
+\bibcite{FDPlus2012}{23}
+\bibcite{WeikumTIS2001}{24}
+\bibcite{Omid2014}{25}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusions}{\thepage }}
+\newlabel{sec:conc}{{7}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Acknowledgments}{\thepage }}
+\@writefile{toc}{\contentsline {section}{\numberline {9}References}{\thepage }}
